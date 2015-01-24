@@ -75,10 +75,14 @@ cacheSolve <- function(x, ...) {
 #
 #I modified the example code given in the project description to automatically 
 #calculate the inverse the first time makeCacheMatrix is called or whenever
-#the matrix is changed by calling set(). This way the user doesn't need to 
-#call setinverse() or cacheSolve() on their own and a call to getinverse() 
-#always returns the correct inverse while still using a cached value.
-#Also, this removes the need for cacheSolve() to check if the inverse is null.
+#the matrix is changed by calling set(). I did this because the only times the
+#inverse needs to be recalculated is on initialization or when set() defines
+#a new matrix. 
+#
+#This way the user doesn't need to call setinverse() or cacheSolve() on their 
+#own and a call to getinverse() always returns the correct inverse while still 
+#using a cached value. Also, this removes the need for cacheSolve() to check 
+#if the inverse is null.
 #
 #If the automation idea is taken further we could remove the cacheSolve() 
 #function entirely and do everything within the cached matrix list.
