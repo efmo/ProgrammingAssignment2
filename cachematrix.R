@@ -1,36 +1,61 @@
+#See end of file for a more thorough description of these functions and their
+#behavior.
 
-# This function returns a list of four functions that return or redefine a matrix
-#and its inverse.
+#makeCacheMatrix
+#This function returns a list of four functions that return or redefine a matrix
+#and its inverse. The argument x is a square invertible matrix.
 
 makeCacheMatrix <- function(x = matrix()) {
     inv <- NULL
+    
+    #this function changes the value of the matrix and automatically 
+    #calculates a new inverse
     set <- function(y) {
         x <<- y
-        inv <<- NULL
         cacheSolve(cacheList)
     }
-    evn <- environment()
+    
+    #return the original (non-inverted) matrix
     get <- function() x
+    
+    #this function sets the value of the inverse that is cached. in this
+    #implementation, the user never calls this function; cacheSolve() does
     setinverse <- function(inverse) inv <<- inverse
+    
+    #return the cached inverse
     getinverse <- function() inv
     
+    #construct the list of functions describing the cached matrix
     cacheList <- list(set = set, get = get,
          setinverse = setinverse,
          getinverse = getinverse)
     
+    #solve for the inverse (this happens when the cached matrix is first created)
     cacheSolve(cacheList)
+    
+    #return the cached matrix
     cacheList
 }
 
-
-## the 'x' argument in cacheSolve is a list of the type returned by makeCacheMatrix
+#cacheSolve
+#This function inputs a list of the type returned by makeCacheMatrix, calculates
+#the inverse of the matrix within the list, and returns the inverse
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-
+        #Note that there is no check for a null inverse here, which is intentional.
+        #The implementation of cacheSolve() within makeCacheMatrix() eliminates the
+        #need to check.
+    
+    #get the matrix using the list's get() function
     invToCache <- x$get()
+
+    #find the inverse of the matrix
     invToCache <- solve(invToCache, ...)
+
+    #set the inverse, which is now cached
     x$setinverse(invToCache)
+
+    #suppress output
     invisible(invToCache)
 }
 
